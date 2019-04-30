@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from authorization import (
+from python_authorization import (
     Authorization,
     Credentials
 )
