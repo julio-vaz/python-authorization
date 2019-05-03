@@ -89,9 +89,9 @@ class Authorization(object):
             return False
 
         signer = Credentials(
-            app_name, app_key, secret_key, token_datetime)
+            app_name, app_key, secret_key)
 
         # Validate if the token is valid as a whole
-        if signer.build_token() == self.token:
+        if signer.build_token(token_datetime) == self.token:
             return True
         return False
