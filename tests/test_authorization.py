@@ -68,10 +68,9 @@ class TestAuthorization(unittest.TestCase):
         credentials = Credentials(
             MOCK_APP_NAME,
             MOCK_APP_KEY,
-            MOCK_SECRET,
-            MOCK_DATETIME
+            MOCK_SECRET
         )
-        token = credentials.build_token()
+        token = credentials.build_token(MOCK_DATETIME)
 
         self.assertEqual(token, self.valid_mock_token)
 
