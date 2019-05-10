@@ -124,8 +124,21 @@ class TestAuthorization(unittest.TestCase):
     @patch.object(Authorization,
                   "_get_app_info",
                   return_value=MOCK_APP_INFO)
-    def test_valid_before_expire_date_token_validation(self, mock_get_app_info):
+    def test_valid_before_past_expire_date_token_validation(
+            self, mock_get_app_info):
         valid_date = datetime.utcnow() - timedelta(seconds=27)
+        now = valid_date.strftime(TIME_STAMP_FORMAT)
+        validater = Authorization(None)
+        is_valid = validater._validate_token_date(now)
+        self.assertTrue(is_valid)
+
+    @patch.dict('os.environ', MOCK_EXPIRATION)
+    @patch.object(Authorization,
+                  "_get_app_info",
+                  return_value=MOCK_APP_INFO)
+    def test_valid_before_future_expire_date_token_validation(
+            self, mock_get_app_info):
+        valid_date = datetime.utcnow() + timedelta(seconds=27)
         now = valid_date.strftime(TIME_STAMP_FORMAT)
         validater = Authorization(None)
         is_valid = validater._validate_token_date(now)
@@ -134,8 +147,20 @@ class TestAuthorization(unittest.TestCase):
     @patch.object(Authorization,
                   "_get_app_info",
                   return_value=MOCK_APP_INFO)
-    def test_invalid_date_token_validation(self, mock_get_app_info):
+    def test_invalid_past_date_token_validation(
+            self, mock_get_app_info):
         invalid_date = datetime.utcnow() - timedelta(seconds=30)
+        now = invalid_date.strftime(TIME_STAMP_FORMAT)
+        validater = Authorization(None, 30)
+        is_valid = validater._validate_token_date(now)
+        self.assertFalse(is_valid)
+
+    @patch.object(Authorization,
+                  "_get_app_info",
+                  return_value=MOCK_APP_INFO)
+    def test_invalid_future_date_token_validation(
+            self, mock_get_app_info):
+        invalid_date = datetime.utcnow() + timedelta(seconds=31)
         now = invalid_date.strftime(TIME_STAMP_FORMAT)
         validater = Authorization(None, 30)
         is_valid = validater._validate_token_date(now)
