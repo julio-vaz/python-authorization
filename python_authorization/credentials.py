@@ -31,8 +31,3 @@ class Credentials(object):
         signature = signature.decode().replace("\n", "")
 
         return f"{self.app_key};{signature};{token_datetime}"
-
-
-if __name__ == '__main__':
-    credentials = Credentials('banana', 'abacate', '123')
-    print(credentials.build_token())

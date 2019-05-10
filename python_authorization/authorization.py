@@ -37,9 +37,13 @@ class Authorization(object):
         is in the valid range"""
         token_date = datetime.strptime(token_datetime, TIME_STAMP_FORMAT)
         now = datetime.utcnow()
-        expiration_date = now - timedelta(
+        past_expiration_date = now - timedelta(
             seconds=self.expiration_in_seconds)
-        if token_date >= expiration_date and token_date <= now:
+        future_expiration_date = now + timedelta(
+            seconds=self.expiration_in_seconds)
+
+        if token_date >= past_expiration_date \
+                and token_date <= future_expiration_date:
             return True
 
         return False
